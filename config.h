@@ -10,17 +10,29 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "UbuntuMono Nerd Font:size=30" };
-static const char dmenufont[]       = "UbuntuMono Nerd Font:size=30";
+static const char *fonts[]          = { "UbuntuMono Nerd Font:size=15" };
+static const char dmenufont[]       = "UbuntuMono Nerd Font:size=15";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char norm_fg[] = "#dff0ef";
+static const char norm_bg[] = "#1c1c25";
+static const char norm_border[] = "#9ca8a7";
+
+static const char sel_fg[] = "#dff0ef";
+static const char sel_bg[] = "#BCA755";
+static const char sel_border[] = "#dff0ef";
+
+static const char urg_fg[] = "#dff0ef";
+static const char urg_bg[] = "#A6975F";
+static const char urg_border[] = "#A6975F";
+
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+    /*               fg           bg         border                         */
+    [SchemeNorm] = { norm_fg,     norm_bg,   norm_border }, // unfocused wins
+    [SchemeSel]  = { sel_fg,      sel_bg,    sel_border },  // the focused win
 };
 
 /* tagging */

@@ -1844,30 +1844,45 @@ void tagmon(const Arg *arg) {
 }
 
 void swapmon(const Arg *arg) {
-  if (!selmon->sel || !mons->next)
-    return;
-  Monitor *nextMon = dirtomon(arg->i);
-  Client *curMonWindows = selmon->clients;
-  Client *nextMonWindows = nextMon->clients;
-  while (curMonWindows) {
-    Client *nextCur = curMonWindows->next;
-    sendmon(curMonWindows, nextMon);
-    curMonWindows = nextCur;
-  }
+    if (!selmon->sel && !mons->next)
+        return;
+    Monitor *nextMon = dirtomon(arg->i);
+    Client *curMonWindows = selmon->clients;
+    Client *nextMonWindows = nextMon->clients;
+    while (curMonWindows) {
+        Client *nextCur = curMonWindows->next;
+        // Store the fullscreen state.
+        int wasFullscreen = curMonWindows->isfullscreen;
+        // If the window was fullscreen, temporarily set it to non-fullscreen.
+        if (wasFullscreen) {
+            setfullscreen(curMonWindows, 0);
+        }
+        // Swap the window if it's on the active tag.
+        if(curMonWindows->tags & selmon->tagset[selmon->seltags]) {
+            sendmon(curMonWindows, nextMon);
+        }
+        // Restore the fullscreen state.
+        if (wasFullscreen) {
+            setfullscreen(curMonWindows, 1);
+        }
+        curMonWindows = nextCur;
+    }
 
-  // If there are remaining windows on the next monitor, move them to the current monitor
-  while (nextMonWindows) {
-    Client *nextNext = nextMonWindows->next;
-    sendmon(nextMonWindows, selmon);
-    nextMonWindows = nextNext;
-  }  /* What I need is a list of clients not a pointer to a pointer*/
-
-  // char* name = selmon->clients->name;
-  // sendmon(selmon->sel, nextMon);
-  // char *larg[] = {"notify-send", name , NULL};
-  // Arg arg1;
-  // arg1.v = larg;
-  // spawn(&arg1);
+    // Similar changes for nextMonWindows.
+    while (nextMonWindows) {
+        Client *nextNext = nextMonWindows->next;
+        int wasFullscreen = nextMonWindows->isfullscreen;
+        if (wasFullscreen) {
+            setfullscreen(nextMonWindows, 0);
+        }
+        if(nextMonWindows->tags & nextMon->tagset[nextMon->seltags]) {
+            sendmon(nextMonWindows, selmon);
+        }
+        if (wasFullscreen) {
+            setfullscreen(nextMonWindows, 1);
+        }
+        nextMonWindows = nextNext;
+    }
 }
 
 void tile(Monitor *m) {
