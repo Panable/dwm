@@ -17,17 +17,17 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
-static const char norm_fg[] = "#dff0ef";
-static const char norm_bg[] = "#1c1c25";
-static const char norm_border[] = "#9ca8a7";
+static const char norm_fg[] = "#acbdc3";
+static const char norm_bg[] = "#0c0709";
+static const char norm_border[] = "#788488";
 
-static const char sel_fg[] = "#dff0ef";
-static const char sel_bg[] = "#BCA755";
-static const char sel_border[] = "#dff0ef";
+static const char sel_fg[] = "#acbdc3";
+static const char sel_bg[] = "#675558";
+static const char sel_border[] = "#acbdc3";
 
-static const char urg_fg[] = "#dff0ef";
-static const char urg_bg[] = "#A6975F";
-static const char urg_border[] = "#A6975F";
+static const char urg_fg[] = "#acbdc3";
+static const char urg_bg[] = "#5B305A";
+static const char urg_border[] = "#5B305A";
 
 static const char *colors[][3]      = {
     /*               fg           bg         border                         */
@@ -107,6 +107,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Left,   tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Right,  tagmon,         {.i = +1 } },
 	{ MODKEY,             XK_minus,      swapmon,        {.i = +1 } },
+	{ MODKEY,             XK_grave,      swapmon,        {.i = +1 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -116,7 +117,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	//{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	// { MODKEY|ShiftMask,             XK_w,      spawn,          {.v = browser}  },
 	// { MODKEY|ShiftMask,             XK_t,      spawn,          {.v = discord}  },
 	// { MODKEY|ShiftMask,             XK_m,      spawn,          {.v = ytmusic}  },
