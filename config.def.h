@@ -51,7 +51,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     switchtotag    isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            0,             1,           -1 },
 	{ "discord",  NULL,       NULL,       1 << 9,       1,             0,           -1 },
-	{ "youtubemusic",  NULL,  NULL,       1 << 10,      1,             0,           -1 },
+	{ "YoutubeMusic",  NULL,  NULL,       1 << 10,      1,             0,           -1 },
 };
 
 /* layout(s) */
