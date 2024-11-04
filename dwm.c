@@ -161,10 +161,10 @@ struct Monitor {
   int by;             /* bar geometry */
   int mx, my, mw, mh; /* screen size */
   int wx, wy, ww, wh; /* window area  */
-  int gappih;           /* horizontal gap between windows */
-  int gappiv;           /* vertical gap between windows */
-  int gappoh;           /* horizontal outer gaps */
-  int gappov;           /* vertical outer gaps */
+  int gappih;         /* horizontal gap between windows */
+  int gappiv;         /* vertical gap between windows */
+  int gappoh;         /* horizontal outer gaps */
+  int gappov;         /* vertical outer gaps */
   unsigned int seltags;
   unsigned int sellt;
   unsigned int tagset[2];
@@ -303,7 +303,6 @@ static void updatetitle(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
-static void warp(const Client *c);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
 static Client *wintosystrayicon(Window w);
@@ -317,10 +316,10 @@ static Systray *systray = NULL;
 static const char broken[] = "broken";
 static char stext[256];
 static int screen;
-static int sw, sh; /* X display screen geometry width, height */
-static int bh;     /* bar height */
-static int enablegaps = 1;   /* enables gaps, used by togglegaps */
-static int lrpad;  /* sum of left and right padding for text */
+static int sw, sh;         /* X display screen geometry width, height */
+static int bh;             /* bar height */
+static int enablegaps = 1; /* enables gaps, used by togglegaps */
+static int lrpad;          /* sum of left and right padding for text */
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
 static void (*handler[LASTEvent])(XEvent *) = {
@@ -386,9 +385,9 @@ void applyrules(Client *c) {
       if (m)
         c->mon = m;
       if (r->switchtotag) {
-          Arg a = { .ui = r->tags };
-          c->switchtotag = selmon->tagset[selmon->seltags];
-          view(&a);
+        Arg a = {.ui = r->tags};
+        c->switchtotag = selmon->tagset[selmon->seltags];
+        view(&a);
       }
     }
   }
@@ -513,13 +512,13 @@ void buttonpress(XEvent *e) {
   if (ev->window == selmon->barwin) {
     i = x = 0;
     unsigned int occ = 0;
-    for(c = m->clients; c; c=c->next)
-        occ |= c->tags == TAGMASK ? 0 : c->tags;
+    for (c = m->clients; c; c = c->next)
+      occ |= c->tags == TAGMASK ? 0 : c->tags;
     do {
-        /* Do not reserve space for vacant tags */
-        if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
-            continue;
-    x += TEXTW(tags[i]);
+      /* Do not reserve space for vacant tags */
+      if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+        continue;
+      x += TEXTW(tags[i]);
     } while (ev->x >= x && ++i < LENGTH(tags));
     if (i < LENGTH(tags)) {
       click = ClkTagBar;
@@ -882,8 +881,8 @@ void drawbar(Monitor *m) {
   x = 0;
   for (i = 0; i < LENGTH(tags); i++) {
     /* Do not draw vacant tags */
-    if(!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
-        continue;
+    if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+      continue;
     w = TEXTW(tags[i]);
     drw_setscheme(
         drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
@@ -990,7 +989,6 @@ void focusmon(const Arg *arg) {
   unfocus(selmon->sel, 0);
   selmon = m;
   focus(NULL);
-  warp(selmon->sel);
 }
 
 void focusstack(const Arg *arg) {
@@ -1560,9 +1558,6 @@ void restack(Monitor *m) {
         wc.sibling = c->win;
       }
   }
-  if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) &&
-      m->lt[m->sellt]->arrange != &monocle)
-    warp(m->sel);
   XSync(dpy, False);
   while (XCheckMaskEvent(dpy, EnterWindowMask, &ev))
     ;
@@ -1698,113 +1693,66 @@ void setfullscreen(Client *c, int fullscreen) {
   }
 }
 
-void
-setgaps(int oh, int ov, int ih, int iv)
-{
-	if (oh < 0) oh = 0;
-	if (ov < 0) ov = 0;
-	if (ih < 0) ih = 0;
-	if (iv < 0) iv = 0;
+void setgaps(int oh, int ov, int ih, int iv) {
+  if (oh < 0)
+    oh = 0;
+  if (ov < 0)
+    ov = 0;
+  if (ih < 0)
+    ih = 0;
+  if (iv < 0)
+    iv = 0;
 
-	selmon->gappoh = oh;
-	selmon->gappov = ov;
-	selmon->gappih = ih;
-	selmon->gappiv = iv;
-	arrange(selmon);
+  selmon->gappoh = oh;
+  selmon->gappov = ov;
+  selmon->gappih = ih;
+  selmon->gappiv = iv;
+  arrange(selmon);
 }
 
-void
-togglegaps(const Arg *arg)
-{
-	enablegaps = !enablegaps;
-	arrange(selmon);
+void togglegaps(const Arg *arg) {
+  enablegaps = !enablegaps;
+  arrange(selmon);
 }
 
-void
-defaultgaps(const Arg *arg)
-{
-	setgaps(gappoh, gappov, gappih, gappiv);
+void defaultgaps(const Arg *arg) { setgaps(gappoh, gappov, gappih, gappiv); }
+
+void incrgaps(const Arg *arg) {
+  setgaps(selmon->gappoh + arg->i, selmon->gappov + arg->i,
+          selmon->gappih + arg->i, selmon->gappiv + arg->i);
 }
 
-void
-incrgaps(const Arg *arg)
-{
-	setgaps(
-		selmon->gappoh + arg->i,
-		selmon->gappov + arg->i,
-		selmon->gappih + arg->i,
-		selmon->gappiv + arg->i
-	);
+void incrigaps(const Arg *arg) {
+  setgaps(selmon->gappoh, selmon->gappov, selmon->gappih + arg->i,
+          selmon->gappiv + arg->i);
 }
 
-void
-incrigaps(const Arg *arg)
-{
-	setgaps(
-		selmon->gappoh,
-		selmon->gappov,
-		selmon->gappih + arg->i,
-		selmon->gappiv + arg->i
-	);
+void incrogaps(const Arg *arg) {
+  setgaps(selmon->gappoh + arg->i, selmon->gappov + arg->i, selmon->gappih,
+          selmon->gappiv);
 }
 
-void
-incrogaps(const Arg *arg)
-{
-	setgaps(
-		selmon->gappoh + arg->i,
-		selmon->gappov + arg->i,
-		selmon->gappih,
-		selmon->gappiv
-	);
+void incrohgaps(const Arg *arg) {
+  setgaps(selmon->gappoh + arg->i, selmon->gappov, selmon->gappih,
+          selmon->gappiv);
 }
 
-void
-incrohgaps(const Arg *arg)
-{
-	setgaps(
-		selmon->gappoh + arg->i,
-		selmon->gappov,
-		selmon->gappih,
-		selmon->gappiv
-	);
+void incrovgaps(const Arg *arg) {
+  setgaps(selmon->gappoh, selmon->gappov + arg->i, selmon->gappih,
+          selmon->gappiv);
 }
 
-void
-incrovgaps(const Arg *arg)
-{
-	setgaps(
-		selmon->gappoh,
-		selmon->gappov + arg->i,
-		selmon->gappih,
-		selmon->gappiv
-	);
+void incrihgaps(const Arg *arg) {
+  setgaps(selmon->gappoh, selmon->gappov, selmon->gappih + arg->i,
+          selmon->gappiv);
 }
 
-void
-incrihgaps(const Arg *arg)
-{
-	setgaps(
-		selmon->gappoh,
-		selmon->gappov,
-		selmon->gappih + arg->i,
-		selmon->gappiv
-	);
+void incrivgaps(const Arg *arg) {
+  setgaps(selmon->gappoh, selmon->gappov, selmon->gappih,
+          selmon->gappiv + arg->i);
 }
 
-void
-incrivgaps(const Arg *arg)
-{
-	setgaps(
-		selmon->gappoh,
-		selmon->gappov,
-		selmon->gappih,
-		selmon->gappiv + arg->i
-	);
-}
-
-void
-setlayout(const Arg *arg) {
+void setlayout(const Arg *arg) {
   if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt])
     selmon->sellt ^= 1;
   if (arg && arg->v)
@@ -1985,45 +1933,45 @@ void tagmon(const Arg *arg) {
 }
 
 void swapmon(const Arg *arg) {
-    if (!selmon->sel && !mons->next)
-        return;
-    Monitor *nextMon = dirtomon(arg->i);
-    Client *curMonWindows = selmon->clients;
-    Client *nextMonWindows = nextMon->clients;
-    while (curMonWindows) {
-        Client *nextCur = curMonWindows->next;
-        // Store the fullscreen state.
-        int wasFullscreen = curMonWindows->isfullscreen;
-        // If the window was fullscreen, temporarily set it to non-fullscreen.
-        if (wasFullscreen) {
-            setfullscreen(curMonWindows, 0);
-        }
-        // Swap the window if it's on the active tag.
-        if(curMonWindows->tags & selmon->tagset[selmon->seltags]) {
-            sendmon(curMonWindows, nextMon);
-        }
-        // Restore the fullscreen state.
-        if (wasFullscreen) {
-            setfullscreen(curMonWindows, 1);
-        }
-        curMonWindows = nextCur;
+  if (!selmon->sel && !mons->next)
+    return;
+  Monitor *nextMon = dirtomon(arg->i);
+  Client *curMonWindows = selmon->clients;
+  Client *nextMonWindows = nextMon->clients;
+  while (curMonWindows) {
+    Client *nextCur = curMonWindows->next;
+    // Store the fullscreen state.
+    int wasFullscreen = curMonWindows->isfullscreen;
+    // If the window was fullscreen, temporarily set it to non-fullscreen.
+    if (wasFullscreen) {
+      setfullscreen(curMonWindows, 0);
     }
+    // Swap the window if it's on the active tag.
+    if (curMonWindows->tags & selmon->tagset[selmon->seltags]) {
+      sendmon(curMonWindows, nextMon);
+    }
+    // Restore the fullscreen state.
+    if (wasFullscreen) {
+      setfullscreen(curMonWindows, 1);
+    }
+    curMonWindows = nextCur;
+  }
 
-    // Similar changes for nextMonWindows.
-    while (nextMonWindows) {
-        Client *nextNext = nextMonWindows->next;
-        int wasFullscreen = nextMonWindows->isfullscreen;
-        if (wasFullscreen) {
-            setfullscreen(nextMonWindows, 0);
-        }
-        if(nextMonWindows->tags & nextMon->tagset[nextMon->seltags]) {
-            sendmon(nextMonWindows, selmon);
-        }
-        if (wasFullscreen) {
-            setfullscreen(nextMonWindows, 1);
-        }
-        nextMonWindows = nextNext;
+  // Similar changes for nextMonWindows.
+  while (nextMonWindows) {
+    Client *nextNext = nextMonWindows->next;
+    int wasFullscreen = nextMonWindows->isfullscreen;
+    if (wasFullscreen) {
+      setfullscreen(nextMonWindows, 0);
     }
+    if (nextMonWindows->tags & nextMon->tagset[nextMon->seltags]) {
+      sendmon(nextMonWindows, selmon);
+    }
+    if (wasFullscreen) {
+      setfullscreen(nextMonWindows, 1);
+    }
+    nextMonWindows = nextNext;
+  }
 }
 
 void tile(Monitor *m) {
@@ -2035,28 +1983,30 @@ void tile(Monitor *m) {
   if (n == 0)
     return;
 
-	if (smartgaps == n) {
-		oe = 0; // outer gaps disabled
-	}
-
+  if (smartgaps == n) {
+    oe = 0; // outer gaps disabled
+  }
 
   if (n > m->nmaster)
-    mw = m->nmaster ? (m->ww + m->gappiv*ie) * m->mfact : 0;
+    mw = m->nmaster ? (m->ww + m->gappiv * ie) * m->mfact : 0;
   else
-    mw = m->ww - 2*m->gappov*oe + m->gappiv*ie;
-  for (i = 0, my = ty = m->gappoh*oe, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+    mw = m->ww - 2 * m->gappov * oe + m->gappiv * ie;
+  for (i = 0, my = ty = m->gappoh * oe, c = nexttiled(m->clients); c;
+       c = nexttiled(c->next), i++)
     if (i < m->nmaster) {
       r = MIN(n, m->nmaster) - i;
-      h = (m->wh - my - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
-      resize(c, m->wx + m->gappov*oe, m->wy + my, mw - (2*c->bw) - m->gappiv*ie, h - (2*c->bw), 0);
+      h = (m->wh - my - m->gappoh * oe - m->gappih * ie * (r - 1)) / r;
+      resize(c, m->wx + m->gappov * oe, m->wy + my,
+             mw - (2 * c->bw) - m->gappiv * ie, h - (2 * c->bw), 0);
       if (my + HEIGHT(c) < m->wh)
-        my += HEIGHT(c) + m->gappih*ie;
+        my += HEIGHT(c) + m->gappih * ie;
     } else {
       r = n - i;
-      h = (m->wh - ty - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
-      resize(c, m->wx + mw + m->gappov*oe, m->wy + ty, m->ww - mw - (2*c->bw) - 2*m->gappov*oe, h - (2*c->bw), 0);
+      h = (m->wh - ty - m->gappoh * oe - m->gappih * ie * (r - 1)) / r;
+      resize(c, m->wx + mw + m->gappov * oe, m->wy + ty,
+             m->ww - mw - (2 * c->bw) - 2 * m->gappov * oe, h - (2 * c->bw), 0);
       if (ty + HEIGHT(c) < m->wh)
-        ty += HEIGHT(c) + m->gappih*ie;
+        ty += HEIGHT(c) + m->gappih * ie;
     }
 }
 
@@ -2154,8 +2104,8 @@ void unmanage(Client *c, int destroyed) {
   updateclientlist();
   arrange(m);
   if (c->switchtotag) {
-      Arg a = { .ui = c->switchtotag };
-      view(&a);
+    Arg a = {.ui = c->switchtotag};
+    view(&a);
   }
 }
 
@@ -2524,24 +2474,6 @@ void view(const Arg *arg) {
     selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
   focus(NULL);
   arrange(selmon);
-}
-
-void warp(const Client *c) {
-  int x, y;
-
-  if (!c) {
-    XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->wx + selmon->ww / 2,
-                 selmon->wy + selmon->wh / 2);
-    return;
-  }
-
-  if (!getrootptr(&x, &y) ||
-      (x > c->x - c->bw && y > c->y - c->bw && x < c->x + c->w + c->bw * 2 &&
-       y < c->y + c->h + c->bw * 2) ||
-      (y > c->mon->by && y < c->mon->by + bh) || (c->mon->topbar && !y))
-    return;
-
-  XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 }
 
 Client *wintoclient(Window w) {
