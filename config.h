@@ -42,12 +42,33 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "", "" };
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", " " };
 
 static const unsigned int ulinepad	= 7;	/* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke	= 3;	/* thickness / height of the underline */
+static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
+
+static const char *tagsel[][2] = {
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#ffdd33" },
+	{ "#000000", "#000000" },
+	{ "#ffffff", "#5865F2" }, // discord
+	{ "#ffffff", "#ff0033" }, // ytmusic
+	{ "#000000", "#ffff00" },
+	{ "#000000", "#00ff00" },
+	{ "#ffffff", "#0000ff" },
+	{ "#ffffff", "#4b0082" },
+	{ "#ffffff", "#9400d3" },
+	{ "#000000", "#ffffff" },
+	{ "#ffffff", "#000000" },
+};
 
 static const Rule rules[] = {
 	/* xprop(1):
