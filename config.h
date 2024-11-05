@@ -25,11 +25,11 @@ static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const char norm_fg[] = "#acbdc3";
-static const char norm_bg[] = "#0c0709";
+static const char norm_bg[] = "#181818"; // BG
 static const char norm_border[] = "#788488";
 
 static const char sel_fg[] = "#acbdc3";
-static const char sel_bg[] = "#675558";
+static const char sel_bg[] = "#453d41"; // BG but lighter
 static const char sel_border[] = "#acbdc3";
 
 static const char urg_fg[] = "#acbdc3";
@@ -52,15 +52,15 @@ static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the b
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
 
 static const char *tagsel[][2] = {
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#ffdd33" },
-	{ "#000000", "#000000" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
+	{ "#ffdd33", "#181818" },
 	{ "#ffffff", "#5865F2" }, // discord
 	{ "#ffffff", "#ff0033" }, // ytmusic
 	{ "#000000", "#ffff00" },
