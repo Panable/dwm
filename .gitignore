@@ -1,0 +1,6 @@
+.cache/
+.ccls-cache/
+.idea/
+compile_commands.json
+config.h
+*.o
