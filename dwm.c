@@ -335,6 +335,7 @@ static int sw, sh;         /* X display screen geometry width, height */
 static int bh;             /* bar height */
 static int enablegaps = 1; /* enables gaps, used by togglegaps */
 static int lrpad;          /* sum of left and right padding for text */
+static int widow = 0;
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
 static void (*handler[LASTEvent])(XEvent *) = {
@@ -551,7 +552,7 @@ void buttonpress(XEvent *e) {
       arg.ui = 1 << i;
     } else if (ev->x < x + TEXTW(selmon->ltsymbol))
       click = ClkLtSymbol;
-    else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2 - getsystraywidth())
+    else if (ev->x > widow)
       click = ClkStatusText;
     else {
       x += TEXTW(selmon->ltsymbol);
@@ -2078,6 +2079,7 @@ int drawstatusbar(Monitor *m, int bh, char *stext) {
 
   w += 2; /* 1px padding on both sides */
   ret = x = m->ww - w - getsystraywidth();
+  widow = ret;
 
   drw_setscheme(drw, scheme[LENGTH(colors)]);
   drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];

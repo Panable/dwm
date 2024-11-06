@@ -1,3 +1,11 @@
+### TODO
+- [ ] Remove awesomebar
+- [ ] Remove rainbowtags
+- [ ] Patch colorful tags
+- [ ] notitle + winicon
+- [ ] make your own awesomebar with winicon
+- [ ] bargap
+
 dwm - dynamic window manager
 ============================
 dwm is an extremely fast, small, and dynamic window manager for X.

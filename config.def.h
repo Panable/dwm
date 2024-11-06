@@ -29,7 +29,7 @@ static const char norm_bg[] = "#181818"; // BG
 static const char norm_border[] = "#788488";
 
 static const char sel_fg[] = "#e4e4ef";
-static const char sel_bg[] = "#453d41"; // BG but lighter
+static const char sel_bg[] = "#282828"; // BG but lighter
 static const char sel_border[] = "#acbdc3";
 
 static const char urg_fg[] = "#acbdc3";
@@ -44,14 +44,15 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", " " };
+static const char *tags[] = { " ", " ", "3", "4", "5", "6", "7", "8", "9", " ", " " };
 
 static const unsigned int ulinepad	= 7;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
-
 static const char *tagsel[][2] = {
+	{ "#cc8c3c", "#181818" },
+	{ "#7faf5e", "#181818" },
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
@@ -59,10 +60,8 @@ static const char *tagsel[][2] = {
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
-	{ "#ffdd33", "#181818" },
-	{ "#ffdd33", "#181818" },
-	{ "#ffffff", "#5865F2" }, // discord
-	{ "#ffffff", "#ff0033" }, // ytmusic
+	{ "#5865F2", "#181818" }, // discord
+	{ "#ff0033", "#181818" }, // ytmusic
 	{ "#000000", "#ffff00" },
 	{ "#000000", "#00ff00" },
 	{ "#ffffff", "#0000ff" },
@@ -166,6 +165,7 @@ static const Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
+	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
