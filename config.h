@@ -17,7 +17,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int horizpadbar        = 5;        /* horizontal padding for statusbar */
 static const int vertpadbar         = 11;        /* vertical padding for statusbar */
-static const char *fonts[]          = { "UbuntuMono Nerd Font:size=12" };
+static const char *fonts[]          = { "UbuntuMono Nerd Font:size=12", "NotoColorEmoji:pixelsize=14:antialias=true:autohint=true" };
 static const char dmenufont[]       = "UbuntuMono Nerd Font:size=15";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -40,7 +40,7 @@ static const char *colors[][3]      = {
     /*               fg           bg         border                         */
     [SchemeNorm] = { norm_fg,     norm_bg,   norm_border }, // unfocused wins
     [SchemeSel]  = { sel_fg,      sel_bg,    sel_border },  // the focused win
-    [SchemeHid]  = { col_cyan,  col_gray1, col_cyan  },
+    [SchemeHid]  = { col_cyan,  norm_bg, col_cyan  },
 };
 
 /* tagging */
@@ -60,7 +60,7 @@ static const char *tagsel[][2] = {
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
-	{ "#5865F2", "#181818" }, // discord
+	{ "#bdc1f2", "#181818" }, // discord
 	{ "#ff0033", "#181818" }, // ytmusic
 	{ "#000000", "#ffff00" },
 	{ "#000000", "#00ff00" },
