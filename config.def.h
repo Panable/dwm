@@ -44,19 +44,25 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1 ", "2 ", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "1 ", "2 ", "3", "4", "5", "6" };
 
 static const unsigned int ulinepad	= 7;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
+/*red=     "#d95a4d"            # Softer red*/
+/*green=   "#7faf5e"          # Softer green*/
+/*yellow=  "#d9b742"         # Softer yellow*/
+/*brown=   "#b08454"          # Softer brown*/
+/*quartz=  "#8fa1af"         # Softer gray-blue*/
+/*niagara= "#7f8eb6"        # Softer blue-gray*/
 static const char *tagsel[][2] = {
-	{ "#cc8c3c", "#181818" },
+	{ "#d95a4d", "#181818" },
 	{ "#7faf5e", "#181818" },
-	{ "#ffdd33", "#181818" },
-	{ "#ffdd33", "#181818" },
-	{ "#ffdd33", "#181818" },
-	{ "#ffdd33", "#181818" },
+	{ "#d9b742", "#181818" },
+	{ "#b08454", "#181818" },
+	{ "#8fa1af", "#181818" },
+	{ "#7f8eb6", "#181818" },
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
 	{ "#ffdd33", "#181818" },
